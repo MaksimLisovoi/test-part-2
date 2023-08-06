@@ -46,3 +46,15 @@ export type coinStateType = {
   isLoading: boolean;
   coinHistory: { history?: coinHistoryItem[] };
 };
+
+//
+//
+export type note = {
+  id: string;
+  name: string;
+  created: string;
+  category: string;
+  content: string;
+  dates?: [] | string;
+  isArchived: boolean;
+};

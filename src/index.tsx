@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { App } from './components/App/App';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 import './index.css';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
@@ -42,10 +44,12 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>,
 );

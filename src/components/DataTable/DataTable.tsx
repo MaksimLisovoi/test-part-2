@@ -1,8 +1,9 @@
 import { DataGrid, GridRowSelectionModel, useGridApiRef } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { columns } from '../../constants/columns';
-import { getCurrencyList } from '../../services/coinDbApi';
-import { pageState } from '../../types';
+import { note } from '../../types';
+
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 
 export const DataTable = () => {
   const apiRef = useGridApiRef();
@@ -25,25 +26,9 @@ export const DataTable = () => {
   //   setShouldShowWatchList(!shouldShowWatchList);
   // };
 
-  const [pageState, setPageState] = useState<pageState>({
-    isLoading: false,
-    currencies: [],
-  });
+  const state = useAppSelector(state => state);
 
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 20,
-    page: 0,
-  });
-
-  const offset = paginationModel.page * paginationModel.pageSize;
-  const limit = paginationModel.pageSize;
-
-  useEffect(() => {
-    setPageState(prevState => ({ ...prevState, isLoading: true }));
-    getCurrencyList(offset, limit).then(data =>
-      setPageState(prevState => ({ ...prevState, currencies: data, isLoading: false })),
-    );
-  }, [limit, offset]);
+  console.log(state);
 
   return (
     <>
@@ -60,23 +45,19 @@ export const DataTable = () => {
         //
         apiRef={apiRef}
         autoHeight
-        rows={pageState.currencies}
-        getRowId={(row: any) => row.rank}
-        rowHeight={70}
+        rows={state}
+        getRowId={(row: note) => row.id}
+        // rowHeight={70}
         columns={columns}
-        rowCount={300}
         //
         pagination
-        paginationMode="server"
-        loading={pageState.isLoading}
         pageSizeOptions={[5, 10, 20, 50]}
-        paginationModel={paginationModel}
-        onPaginationModelChange={setPaginationModel}
         //
-        checkboxSelection
         disableRowSelectionOnClick
-        rowSelectionModel={rowSelectionModel}
-        keepNonExistentRowsSelected
+        // checkboxSelection
+        // disableRowSelectionOnClick
+        // rowSelectionModel={rowSelectionModel}
+        // keepNonExistentRowsSelected
         //
         sx={{
           // minHeight: '600px',
