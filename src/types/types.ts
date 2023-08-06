@@ -58,3 +58,14 @@ export type note = {
   dates?: [] | string;
   isArchived: boolean;
 };
+export type updatedNote = {
+  name: string;
+  category: string;
+  content: string;
+  dates?: [] | string;
+};
+
+export type notesType = {
+  shouldShowArchived: Boolean;
+  notes: note[];
+};

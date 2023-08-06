@@ -1,20 +1,29 @@
 import { Button } from '@mui/material';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ArchiveIcon from '@mui/icons-material/Archive';
 import { GridToolbarContainer } from '@mui/x-data-grid';
 
-export const CustomGridToolbar = (props: any) => {
-  const { handleSwitchWatchList, shouldShowWatchList } = props;
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { selectShouldShowArchived } from '../../redux/selectors';
+import { toggleShouldShowArchived } from '../../redux/notesSlice';
 
-  const isClicked = shouldShowWatchList ? 'error' : 'inherit';
+export const CustomGridToolbar = () => {
+  const shouldShowArchivedNotes = useAppSelector(selectShouldShowArchived);
+  const dispatch = useAppDispatch();
+
+  const handleClick = () => {
+    return dispatch(toggleShouldShowArchived());
+  };
+
+  const isClicked = shouldShowArchivedNotes ? 'error' : 'inherit';
   return (
     <GridToolbarContainer>
       <Button
-        onClick={handleSwitchWatchList}
+        onClick={handleClick}
         size="medium"
         variant="contained"
-        endIcon={<FavoriteBorderIcon color={isClicked} />}
+        endIcon={<ArchiveIcon color={isClicked} />}
       >
-        Watchlist
+        Archived
       </Button>
     </GridToolbarContainer>
   );

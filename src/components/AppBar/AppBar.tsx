@@ -17,7 +17,7 @@ export const AppBar = () => {
         borderBottom: '1px solid #2a363b',
       }}
     >
-      <Container>
+      <Container maxWidth="xl">
         <Nav />
       </Container>
     </Box>

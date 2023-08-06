@@ -10,16 +10,17 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Typography,
 } from '@mui/material';
 import { ChangeEvent, ChangeEventHandler, useRef, useState } from 'react';
 import { categories } from '../../constants/categories';
 
 const inputStyles = {
-  marginBottom: '50px',
+  marginBottom: 7,
   '.MuiInputBase-input': { padding: '16px 14px' },
   '.MuiFormHelperText-root': {
     mt: '4px',
-    mb: ' 0',
+    mb: '0',
     ml: '16px',
     fontSize: '12px',
     lineHeight: '1.16',
@@ -84,14 +85,22 @@ export const FormAddNote = () => {
       //   refreshPage();
       //   return;
       // }
-      console.log(dataObject);
-      // dispatch(addNote(name, created, category, content, dates));
+      // console.log(dataObject);
+      dispatch(addNote(name, created, category, content, dates));
     } catch (error) {
       console.log(error);
     }
   }
   return (
     <>
+      <Typography
+        id="transition-modal-title"
+        variant="h5"
+        component="h2"
+        sx={{ textAlign: 'center', mb: 7, fontSize: '30px' }}
+      >
+        Add Note
+      </Typography>
       <Box
         ref={form}
         onSubmit={submitHandler}
@@ -132,6 +141,8 @@ export const FormAddNote = () => {
         </FormControl>
         <TextField
           onChange={handleChangeContent}
+          multiline
+          rows={4}
           value={inputContent}
           sx={inputStyles}
           fullWidth
@@ -139,7 +150,9 @@ export const FormAddNote = () => {
           id="content"
           label="Type note text here..."
         />
-        <Button type="submit">Add note</Button>
+        <Button variant="contained" size="large" type="submit">
+          Add note
+        </Button>
       </Box>
     </>
   );

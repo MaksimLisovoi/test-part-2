@@ -11,6 +11,7 @@ export const Layout = () => {
     <>
       <AppBar />
       <Container
+        maxWidth="xl"
         sx={{
           minHeight: '100vh',
         }}

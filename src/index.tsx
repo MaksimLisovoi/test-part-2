@@ -38,6 +38,16 @@ const darkTheme = createTheme({
       default: '#171B26',
     },
   },
+
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 360,
+      md: 768,
+      lg: 1024,
+      xl: 1320,
+    },
+  },
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

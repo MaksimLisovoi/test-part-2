@@ -4,55 +4,34 @@ import { columns } from '../../constants/columns';
 import { note } from '../../types';
 
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { CustomGridToolbar } from '../CustomGridToolbar';
+import { selectVisibleNotes } from '../../redux/selectors';
 
 export const DataTable = () => {
   const apiRef = useGridApiRef();
 
-  const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-  // const [shouldShowWatchList, setShouldShowWatchList] = useState(false);
-  // const [selectedRows, setSelectedRows] = useState<currency[]>([]);
-
-  // if (selectedRows && selectedRows.length > 0) {
-  //   localStorageService.save('selectedRows', selectedRows);
-  // }
-
-  // useEffect(() => {
-  //   const selectedRowsFromLS = localStorageService.load('selectedRows') || [];
-
-  //   setSelectedRows(selectedRowsFromLS);
-  // }, []);
-
-  // const handleSwitchWatchList = () => {
-  //   setShouldShowWatchList(!shouldShowWatchList);
-  // };
-
-  const state = useAppSelector(state => state);
-
-  console.log(state);
+  const notes = useAppSelector(selectVisibleNotes);
+  // const archivedNotes = useAppSelector(selectArchivedNotes);
+  // const archivedNotes = selectArchivedNotes(state);
 
   return (
     <>
       <DataGrid
-        // slots={{
-        //   toolbar: CustomGridToolbar,
-        // }}
-        // slotProps={{
-        //   toolbar: {
-        //     handleSwitchWatchList: handleSwitchWatchList,
-        //     shouldShowWatchList: shouldShowWatchList,
-        //   },
-        // }}
-        //
+        slots={{
+          toolbar: CustomGridToolbar,
+        }}
         apiRef={apiRef}
         autoHeight
-        rows={state}
+        rows={notes}
         getRowId={(row: note) => row.id}
         // rowHeight={70}
         columns={columns}
         //
-        pagination
+
+        initialState={{
+          pagination: { paginationModel: { pageSize: 10 } },
+        }}
         pageSizeOptions={[5, 10, 20, 50]}
-        //
         disableRowSelectionOnClick
         // checkboxSelection
         // disableRowSelectionOnClick

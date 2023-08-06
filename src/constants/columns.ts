@@ -1,7 +1,9 @@
 import { GridColDef } from '@mui/x-data-grid';
 
+import { NoteBtnGroup } from '../components/DataTable/NoteBtnGroup';
+
 export const columns: GridColDef[] = [
-  { field: 'id', headerName: '#', width: 50 },
+  // { field: 'id', headerName: '#', width: 50 },
   {
     field: 'name',
     headerName: 'Name',
@@ -29,5 +31,11 @@ export const columns: GridColDef[] = [
     field: 'dates',
     headerName: 'Dates',
     minWidth: 150,
+  },
+
+  {
+    field: 'btns',
+    minWidth: 150,
+    renderCell: NoteBtnGroup,
   },
 ];

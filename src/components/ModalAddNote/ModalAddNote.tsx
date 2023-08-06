@@ -9,9 +9,13 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 800,
   bgcolor: 'primary.tableBg',
-  border: '2px solid #000',
+
+  borderRadius: '5px',
+
   boxShadow: 24,
   p: 4,
+  pt: 6,
+  pb: 6,
 };
 
 export const ModalAddNote = () => {
@@ -26,7 +30,6 @@ export const ModalAddNote = () => {
 
       <Modal
         aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
         open={open}
         onClose={handleClose}
         closeAfterTransition
