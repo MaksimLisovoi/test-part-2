@@ -1,3 +1,5 @@
+### React/Redux Note app
+
 ## Tools/Library Used
 
 - Typescript
