@@ -5,12 +5,17 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
 import { GridRenderCellParams } from '@mui/x-data-grid';
-import { useAppDispatch } from '../../redux/hooks';
-import { deleteNote, archiveNote } from '../../redux/notesSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { deleteNote, archiveNote, setCurrentNote, toggleModalOpen } from '../../redux/notesSlice';
+
+import { selectVisibleNotes } from '../../redux/selectors';
 
 export const NoteBtnGroup = (params: GridRenderCellParams<any, string>) => {
   const dispatch = useAppDispatch();
-  //   console.log(params.id);
+
+  const toggleModal = () => {
+    dispatch(toggleModalOpen());
+  };
 
   const onClickDeleteHandler = () => {
     try {
@@ -27,9 +32,19 @@ export const NoteBtnGroup = (params: GridRenderCellParams<any, string>) => {
       console.log(error);
     }
   };
+
+  const onClickUpdateHandler = () => {
+    const { id, name, category, content, dates } = params.row;
+    try {
+      dispatch(setCurrentNote({ id, name, category, content, dates }));
+      toggleModal();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Box>
-      <IconButton aria-label="update">
+      <IconButton onClick={onClickUpdateHandler} aria-label="update">
         <EditIcon />
       </IconButton>
       <IconButton onClick={onClickDeleteHandler} aria-label="delete">

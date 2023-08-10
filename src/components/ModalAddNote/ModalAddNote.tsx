@@ -1,6 +1,9 @@
-import { Button, Modal, Fade, Backdrop, Typography, Box } from '@mui/material';
-import { useState } from 'react';
-import { FormAddNote } from '../FormAddNote/FormAddNote';
+import { Button, Modal, Fade, Backdrop, Box } from '@mui/material';
+
+import { FormAddNote } from '../FormAddNote';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { selectIsModalOpen } from '../../redux/selectors';
+import { setCurrentNote, toggleModalOpen } from '../../redux/notesSlice';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -14,24 +17,35 @@ const style = {
 
   boxShadow: 24,
   p: 4,
-  pt: 6,
-  pb: 6,
+  pt: 8,
+  pb: 10,
 };
 
 export const ModalAddNote = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const isModalOpen = useAppSelector(selectIsModalOpen);
+
+  const dispatch = useAppDispatch();
+
+  const toggleModal = () => {
+    dispatch(toggleModalOpen());
+  };
+
+  const closeModal = () => {
+    toggleModal();
+    setTimeout(function () {
+      dispatch(setCurrentNote(null));
+    }, 500);
+  };
   return (
     <>
-      <Button onClick={handleOpen} size="large" sx={{ mt: '16px' }} variant="contained">
+      <Button onClick={toggleModal} size="large" sx={{ mt: '16px' }} variant="contained">
         Add Note
       </Button>
 
       <Modal
         aria-labelledby="transition-modal-title"
-        open={open}
-        onClose={handleClose}
+        open={isModalOpen}
+        onClose={closeModal}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -40,7 +54,7 @@ export const ModalAddNote = () => {
           },
         }}
       >
-        <Fade in={open}>
+        <Fade in={isModalOpen}>
           <Box sx={style}>
             <FormAddNote />
           </Box>

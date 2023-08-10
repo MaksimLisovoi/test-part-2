@@ -1,19 +1,14 @@
 import { Box } from '@mui/system';
-import { datesRegex } from '../../services/regexes';
-import { useAppDispatch } from '../../redux/hooks';
-import { addNote } from '../../redux/notesSlice';
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { ChangeEvent, ChangeEventHandler, useRef, useState } from 'react';
-import { categories } from '../../constants/categories';
+import { datesRegex, datesRegex2 } from '../../services/regexes';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { addNote, setCurrentNote, toggleModalOpen, updateNote } from '../../redux/notesSlice';
+import { Button, Typography } from '@mui/material';
+import { useState } from 'react';
+import { selectCurrentNote } from '../../redux/selectors';
+import { NameInput } from './NameInput';
+import { CategoryInput } from './CategoryInput';
+import { ContentInput } from './ContentInput';
+import { dateFormat } from '../../constants/helpers';
 
 const inputStyles = {
   marginBottom: 7,
@@ -28,65 +23,40 @@ const inputStyles = {
 };
 
 export const FormAddNote = () => {
-  const form = useRef<HTMLFormElement | undefined>();
   const dispatch = useAppDispatch();
+  const currentNote = useAppSelector(selectCurrentNote);
+  const modalHeader = `${!currentNote ? 'Add Note' : 'Update Note'}`;
+  const closeModal = () => {
+    dispatch(toggleModalOpen());
+  };
 
-  const [inputCategory, setInputCategory] = useState('');
-  const [inputName, setInputName] = useState('');
-  const [inputContent, setInputContent] = useState('');
-
-  const handleChangeCategory = (event: SelectChangeEvent) => {
-    setInputCategory(event.target.value as string);
-  };
-  const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputName(event.target.value as string);
-  };
-  const handleChangeContent = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputContent(event.target.value as string);
-  };
+  const [inputCategory, setInputCategory] = useState(currentNote?.category || '');
+  const [inputName, setInputName] = useState(currentNote?.name || '');
+  const [inputContent, setInputContent] = useState<any>(currentNote?.content || '');
 
   function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    // if (form.current !== null) {
-    //   return;
-    // }
-    const formData = new FormData();
-    const content: any = formData.get('content');
+    const createdDate = new Date().toLocaleDateString('en-us', dateFormat);
 
-    const createdDate = new Date().toLocaleDateString('en-us', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+    const contentCheck = inputContent.match(datesRegex) || inputContent.match(datesRegex2);
 
-    formData.append('created', createdDate);
-    formData.append('name', inputName);
-    formData.append('content', inputContent);
-    formData.append('category', inputCategory);
+    let dates = '';
 
-    if (content !== null) {
-      content.match(datesRegex)
-        ? formData.append('dates', content.match(datesRegex))
-        : formData.append('dates', '');
+    if (inputContent !== null) {
+      if (contentCheck) {
+        dates = contentCheck;
+      }
     }
 
-    const dataObject = Object.fromEntries(formData.entries());
-    const { name, created, category, dates } = dataObject;
-
-    // const currentNote = notes[refs.notesForm.id];
-
     try {
-      // if (currentNote) {
-      //   currentNote.name = dataObject.name;
-      //   currentNote.category = dataObject.category;
-      //   currentNote.content = dataObject.content;
-
-      //   refreshPage();
-      //   return;
-      // }
-      // console.log(dataObject);
-      dispatch(addNote(name, created, category, content, dates));
+      if (currentNote) {
+        dispatch(updateNote(currentNote.id, inputName, inputCategory, inputContent, dates));
+        closeModal();
+        return;
+      }
+      dispatch(addNote(inputName, createdDate, inputCategory, inputContent, dates));
+      closeModal();
     } catch (error) {
       console.log(error);
     }
@@ -99,10 +69,9 @@ export const FormAddNote = () => {
         component="h2"
         sx={{ textAlign: 'center', mb: 7, fontSize: '30px' }}
       >
-        Add Note
+        {modalHeader}
       </Typography>
       <Box
-        ref={form}
         onSubmit={submitHandler}
         component="form"
         id="sign-up"
@@ -113,45 +82,21 @@ export const FormAddNote = () => {
           flexDirection: 'column',
         }}
       >
-        <TextField
-          onChange={handleChangeName}
-          value={inputName}
-          sx={inputStyles}
-          fullWidth
-          autoComplete="given-name"
-          id="name"
-          label="Note name"
+        <NameInput inputStyles={inputStyles} inputName={inputName} setInputName={setInputName} />
+
+        <CategoryInput
+          inputStyles={inputStyles}
+          inputCategory={inputCategory}
+          setInputCategory={setInputCategory}
         />
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Category</InputLabel>
-          <Select
-            sx={inputStyles}
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={inputCategory}
-            label="Category"
-            onChange={handleChangeCategory}
-          >
-            {categories.map(category => (
-              <MenuItem key={category} value={category}>
-                {category}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <TextField
-          onChange={handleChangeContent}
-          multiline
-          rows={4}
-          value={inputContent}
-          sx={inputStyles}
-          fullWidth
-          autoComplete="given-name"
-          id="content"
-          label="Type note text here..."
+        <ContentInput
+          inputStyles={inputStyles}
+          setInputContent={setInputContent}
+          inputContent={inputContent}
         />
+
         <Button variant="contained" size="large" type="submit">
-          Add note
+          {modalHeader}
         </Button>
       </Box>
     </>

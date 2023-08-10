@@ -1,18 +1,31 @@
-import { DataGrid, GridRowSelectionModel, useGridApiRef } from '@mui/x-data-grid';
-import { useEffect, useState } from 'react';
-import { columns } from '../../constants/columns';
+import {
+  DataGrid,
+  GridCellEditStopParams,
+  GridCellEditStopReasons,
+  GridRowEditStopParams,
+  GridRowEditStopReasons,
+  MuiEvent,
+  useGridApiRef,
+} from '@mui/x-data-grid';
+import { columns, columnsSummary } from '../../constants/columns';
 import { note } from '../../types';
 
-import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CustomGridToolbar } from '../CustomGridToolbar';
-import { selectVisibleNotes } from '../../redux/selectors';
+import { selectShouldShowSummary, selectSummary, selectVisibleNotes } from '../../redux/selectors';
+import { notesAmountItem } from '../../types';
+import { updateNote } from '../../redux/notesSlice';
 
 export const DataTable = () => {
+  // console.log(apiRef);
+
   const apiRef = useGridApiRef();
 
   const notes = useAppSelector(selectVisibleNotes);
-  // const archivedNotes = useAppSelector(selectArchivedNotes);
-  // const archivedNotes = selectArchivedNotes(state);
+  const summary = useAppSelector(selectSummary);
+  const shouldShowSum = useAppSelector(selectShouldShowSummary);
+
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -22,22 +35,23 @@ export const DataTable = () => {
         }}
         apiRef={apiRef}
         autoHeight
-        rows={notes}
-        getRowId={(row: note) => row.id}
-        // rowHeight={70}
-        columns={columns}
+        rows={shouldShowSum ? summary : notes}
+        getRowId={(row: any) => (shouldShowSum ? row.category : row.id)}
         //
-
+        editMode="row"
+        processRowUpdate={(updatedRow, originalRow) => {
+          const { id, name, category, content, dates } = updatedRow;
+          dispatch(updateNote(id, name, category, content, dates));
+          return updatedRow;
+        }}
+        //
+        columns={shouldShowSum ? columnsSummary : columns}
+        //
         initialState={{
           pagination: { paginationModel: { pageSize: 10 } },
         }}
         pageSizeOptions={[5, 10, 20, 50]}
         disableRowSelectionOnClick
-        // checkboxSelection
-        // disableRowSelectionOnClick
-        // rowSelectionModel={rowSelectionModel}
-        // keepNonExistentRowsSelected
-        //
         sx={{
           // minHeight: '600px',
           mt: 2,
@@ -51,6 +65,13 @@ export const DataTable = () => {
             backgroundColor: 'primary.accent',
           },
           fontSize: 16,
+          '& .MuiTablePagination-root': shouldShowSum
+            ? {
+                display: 'none',
+              }
+            : {
+                display: 'inherit',
+              },
         }}
       />
     </>

@@ -59,6 +59,7 @@ export type note = {
   isArchived: boolean;
 };
 export type updatedNote = {
+  id: string;
   name: string;
   category: string;
   content: string;
@@ -66,6 +67,12 @@ export type updatedNote = {
 };
 
 export type notesType = {
-  shouldShowArchived: Boolean;
+  shouldShowArchived: boolean;
+  shouldShowSummary: boolean;
+  isModalOpen: boolean;
+  currentNote: note | null;
   notes: note[];
 };
+
+export type notesAmountItem = { category: string; active: number; archived: number };
+export type notesAmountType = notesAmountItem[];

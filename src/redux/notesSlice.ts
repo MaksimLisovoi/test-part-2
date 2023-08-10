@@ -3,9 +3,13 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { nanoid } from 'nanoid';
 import { notesType, note, updatedNote } from '../types';
+import { current } from '@reduxjs/toolkit';
 
 const notesInitialState: notesType = {
   shouldShowArchived: false,
+  shouldShowSummary: false,
+  isModalOpen: false,
+  currentNote: null,
   notes: [
     {
       id: '1',
@@ -80,11 +84,6 @@ const notesSlice = createSlice({
       reducer(state, action: PayloadAction<note>) {
         state.notes.push(action.payload);
       },
-      // prepare(data) {
-      //   return {
-      //     payload: data,
-      //   };
-      // },
       prepare(name, created, category, content, dates) {
         return {
           payload: {
@@ -103,29 +102,33 @@ const notesSlice = createSlice({
       const index = state.notes.findIndex(note => note.id === action.payload);
       state.notes.splice(index, 1);
     },
-    // updateNote: {
-    //   reducer(state, action: PayloadAction<string>) {
-    //     for (const note of state.notes) {
-    //       if (note.id === action.payload) {
-    //         note.isArchived = !note.isArchived;
-    //         break;
-    //       }
-    //     }
-    //   },
-    //   prepare(name, category, content, dates) {
-    //     return {
-    //       payload: {
-    //         name,
+    updateNote: {
+      reducer(state, action: PayloadAction<updatedNote>) {
+        // console.log(state.notes.find(note => note.id === action.payload.id));
 
-    //         category,
-    //         content,
-    //         dates,
-    //         id: nanoid(),
-    //         isArchived: false,
-    //       },
-    //     };
-    //   },
-    // },
+        for (const note of state.notes) {
+          if (note.id === action.payload.id) {
+            note.name = action.payload.name;
+            note.content = action.payload.content;
+            note.category = action.payload.category;
+            note.dates = action.payload.dates;
+
+            break;
+          }
+        }
+      },
+      prepare(id, name, category, content, dates) {
+        return {
+          payload: {
+            id,
+            name,
+            category,
+            content,
+            dates,
+          },
+        };
+      },
+    },
     archiveNote(state, action: PayloadAction<string>) {
       for (const note of state.notes) {
         if (note.id === action.payload) {
@@ -134,11 +137,29 @@ const notesSlice = createSlice({
         }
       }
     },
+    setCurrentNote(state, action: PayloadAction<any>) {
+      state.currentNote = action.payload;
+    },
     toggleShouldShowArchived(state) {
       state.shouldShowArchived = !state.shouldShowArchived;
+    },
+    toggleShouldShowSummary(state) {
+      state.shouldShowSummary = !state.shouldShowSummary;
+    },
+    toggleModalOpen(state) {
+      state.isModalOpen = !state.isModalOpen;
     },
   },
 });
 // Експортуємо генератори екшенів та редюсер
-export const { addNote, deleteNote, archiveNote, toggleShouldShowArchived } = notesSlice.actions;
+export const {
+  addNote,
+  deleteNote,
+  archiveNote,
+  toggleShouldShowArchived,
+  toggleShouldShowSummary,
+  toggleModalOpen,
+  updateNote,
+  setCurrentNote,
+} = notesSlice.actions;
 export const notesReducer = notesSlice.reducer;
