@@ -5,10 +5,8 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
 import { GridRenderCellParams } from '@mui/x-data-grid';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppDispatch } from '../../redux/hooks';
 import { deleteNote, archiveNote, setCurrentNote, toggleModalOpen } from '../../redux/notesSlice';
-
-import { selectVisibleNotes } from '../../redux/selectors';
 
 export const NoteBtnGroup = (params: GridRenderCellParams<any, string>) => {
   const dispatch = useAppDispatch();

@@ -1,6 +1,5 @@
 import { DataGrid, useGridApiRef } from '@mui/x-data-grid';
 import { columns, columnsSummary } from '../../constants/columns';
-import { note } from '../../types';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CustomGridToolbar } from '../CustomGridToolbar';

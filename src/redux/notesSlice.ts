@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from './store';
+
 import { nanoid } from 'nanoid';
 import { notesType, note, updatedNote } from '../types';
-import { current } from '@reduxjs/toolkit';
 
 const notesInitialState: notesType = {
   shouldShowArchived: false,

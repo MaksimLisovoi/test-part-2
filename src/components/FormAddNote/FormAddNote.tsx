@@ -1,8 +1,8 @@
 import { Box } from '@mui/system';
 import { datesRegex, datesRegex2 } from '../../services/regexes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { addNote, setCurrentNote, toggleModalOpen, updateNote } from '../../redux/notesSlice';
-import { Button, Typography } from '@mui/material';
+import { addNote, toggleModalOpen, updateNote } from '../../redux/notesSlice';
+import { Button } from '@mui/material';
 import { useState } from 'react';
 import { selectCurrentNote } from '../../redux/selectors';
 import { NameInput } from './NameInput';

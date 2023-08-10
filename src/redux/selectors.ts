@@ -30,7 +30,7 @@ export const selectSummary = createSelector(
       return [];
     }
     const resultArr: notesAmountType = [];
-
+    //eslint-disable-next-line
     const notesAmount = notes.reduce((acc: any, note) => {
       return {
         ...acc,
@@ -45,7 +45,7 @@ export const selectSummary = createSelector(
 
     const allCategories = Object.keys({ ...notesAmount.active, ...notesAmount.isArchived });
 
-    allCategories.map(category => {
+    allCategories.forEach(category => {
       resultArr.push({
         category: category,
         active: notesAmount.active[category],
@@ -56,6 +56,3 @@ export const selectSummary = createSelector(
     return resultArr;
   },
 );
-
-// export const selectArchivedNotes = (state: RootState) =>
-//   state.notes.filter(note => note.isArchived);
