@@ -52,7 +52,7 @@ export const DataTable = () => {
           '& .MuiDataGrid-row:hover': {
             backgroundColor: 'primary.accent',
           },
-          fontSize: 16,
+          fontSize: 12,
           '& .MuiTablePagination-root': shouldShowSum
             ? {
                 display: 'none',
