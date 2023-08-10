@@ -67,6 +67,7 @@ export const columns: GridColDef[] = [
 
   {
     field: 'btns',
+    headerName: '',
     minWidth: 150,
     renderCell: NoteBtnGroup,
   },
