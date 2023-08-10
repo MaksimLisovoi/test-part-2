@@ -1,24 +1,13 @@
-import {
-  DataGrid,
-  GridCellEditStopParams,
-  GridCellEditStopReasons,
-  GridRowEditStopParams,
-  GridRowEditStopReasons,
-  MuiEvent,
-  useGridApiRef,
-} from '@mui/x-data-grid';
+import { DataGrid, useGridApiRef } from '@mui/x-data-grid';
 import { columns, columnsSummary } from '../../constants/columns';
 import { note } from '../../types';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CustomGridToolbar } from '../CustomGridToolbar';
 import { selectShouldShowSummary, selectSummary, selectVisibleNotes } from '../../redux/selectors';
-import { notesAmountItem } from '../../types';
 import { updateNote } from '../../redux/notesSlice';
 
 export const DataTable = () => {
-  // console.log(apiRef);
-
   const apiRef = useGridApiRef();
 
   const notes = useAppSelector(selectVisibleNotes);

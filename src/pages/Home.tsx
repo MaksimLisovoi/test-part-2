@@ -2,7 +2,6 @@ import { Box } from '@mui/system';
 import { Button, Typography } from '@mui/material';
 import { DataTable } from '../components/DataTable';
 import { ModalAddNote } from '../components/ModalAddNote/ModalAddNote';
-import { SummaryTable } from '../components/DataTable/SummaryTable';
 import { useGridApiRef } from '@mui/x-data-grid';
 
 const Home = () => {

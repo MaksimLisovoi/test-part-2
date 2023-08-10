@@ -9,6 +9,7 @@ import { NameInput } from './NameInput';
 import { CategoryInput } from './CategoryInput';
 import { ContentInput } from './ContentInput';
 import { dateFormat } from '../../constants/helpers';
+import { FormHeader } from './FormHeader';
 
 const inputStyles = {
   marginBottom: 7,
@@ -63,14 +64,7 @@ export const FormAddNote = () => {
   }
   return (
     <>
-      <Typography
-        id="transition-modal-title"
-        variant="h5"
-        component="h2"
-        sx={{ textAlign: 'center', mb: 7, fontSize: '30px' }}
-      >
-        {modalHeader}
-      </Typography>
+      <FormHeader modalHeader={modalHeader} />
       <Box
         onSubmit={submitHandler}
         component="form"
