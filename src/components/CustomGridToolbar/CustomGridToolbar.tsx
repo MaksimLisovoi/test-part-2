@@ -1,4 +1,4 @@
-import { Button, useTheme } from '@mui/material';
+import { Button, styled, useTheme } from '@mui/material';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import { GridToolbarContainer } from '@mui/x-data-grid';
@@ -28,8 +28,25 @@ export const CustomGridToolbar = () => {
 
   console.log(theme);
 
+  const ButtonBase = styled(Button)(({ theme }) => ({
+    [theme.breakpoints.down('md')]: {
+      size: 'small',
+    },
+    [theme.breakpoints.up('md')]: {
+      size: 'medium',
+    },
+    [theme.breakpoints.up('lg')]: {
+      size: 'small',
+    },
+  }));
+
   return (
     <GridToolbarContainer sx={{ pb: 1 }}>
+      <ButtonBase
+        onClick={handleClickArchived}
+        variant="contained"
+        endIcon={<ArchiveIcon color={isClickedArchived} />}
+      />
       <Button
         onClick={handleClickArchived}
         size="medium"
@@ -40,7 +57,7 @@ export const CustomGridToolbar = () => {
       </Button>
       <Button
         onClick={handleClickSummary}
-        size="medium"
+        size={'medium'}
         variant="contained"
         endIcon={<SummarizeIcon color={isClickedSummary} />}
       >
